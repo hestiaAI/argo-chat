@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Basic Chat Example</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <div class="container">
+            <h1>Basic Chat Example</h1>
+            <p>Click the chat button in the bottom right corner to start.</p>
+        </div>
+        <script type="module">
+            import { ArgoChat } from '../../dist/argo-chat.js';
+
+            const chatConfig = {
+                title: 'Argonaut Chat',
+            };
+
+            const chat = new ArgoChat(chatConfig);
+            document.body.appendChild(chat);
+        </script>
+    </body>
+</html>

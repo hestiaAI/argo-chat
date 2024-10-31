@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Chat Component Demo</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lit/2.8.0/lit.min.js"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Arial:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            input[type='color'] {
+                padding: 0;
+                width: 50px;
+                height: 30px;
+            }
+            .code-input {
+                font-family: monospace;
+                white-space: pre;
+                overflow-x: auto;
+            }
+        </style>
+    </head>
+    <body class="bg-gray-100 min-h-screen">
+        <div class="container mx-auto px-4 py-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Configuration Panel -->
+                <div class="bg-white rounded-lg shadow-lg p-6 space-y-6">
+                    <h2 class="text-2xl font-bold mb-4">Chat Configuration</h2>
+
+                    <!-- Basic Settings -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-semibold">Basic Settings</h3>
+                        <div class="grid gap-4">
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-gray-700"
+                                    >Title</label
+                                >
+                                <input
+                                    type="text"
+                                    id="title"
+                                    value="Chat Support"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                />
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-gray-700"
+                                    >API Key</label
+                                >
+                                <input
+                                    type="text"
+                                    id="apiKey"
+                                    value="your-api-key"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                />
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-gray-700"
+                                    >API Endpoint</label
+                                >
+                                <input
+                                    type="text"
+                                    id="apiEndpoint"
+                                    value="https://api.argonaut.dev/v1"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                />
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-gray-700"
+                                    >Greeting Message</label
+                                >
+                                <input
+                                    type="text"
+                                    id="greeting"
+                                    value="Hello! How can I help you today?"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                />
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-gray-700"
+                                    >Placeholder Text</label
+                                >
+                                <input
+                                    type="text"
+                                    id="placeholder"
+                                    value="Type a message..."
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                />
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-gray-700"
+                                    >Position</label
+                                >
+                                <select
+                                    id="position"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                >
+                                    <option value="bottom-right">
+                                        Bottom Right
+                                    </option>
+                                    <option value="bottom-left">
+                                        Bottom Left
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Theme Settings -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-semibold">Theme Settings</h3>
+                        <div class="grid gap-4">
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-gray-700"
+                                    >Primary Color</label
+                                >
+                                <div class="flex items-center gap-2">
+                                    <input
+                                        type="color"
+                                        id="primaryColor"
+                                        value="#3B82F6"
+                                    />
+                                    <span
+                                        id="primaryColorHex"
+                                        class="text-sm text-gray-600"
+                                        >#3B82F6</span
+                                    >
+                                </div>
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-gray-700"
+                                    >Text Color</label
+                                >
+                                <div class="flex items-center gap-2">
+                                    <input
+                                        type="color"
+                                        id="textColor"
+                                        value="#FFFFFF"
+                                    />
+                                    <span
+                                        id="textColorHex"
+                                        class="text-sm text-gray-600"
+                                        >#FFFFFF</span
+                                    >
+                                </div>
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-gray-700"
+                                    >Font Family</label
+                                >
+                                <select
+                                    id="fontFamily"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                >
+                                    <option value="Inter">Inter</option>
+                                    <option value="Roboto">Roboto</option>
+                                    <option value="Arial">Arial</option>
+                                    <option value="Ubuntu">Ubuntu</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Icons Settings -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-semibold">Icons Settings</h3>
+                        <div class="grid gap-4">
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-gray-700"
+                                    >User Icon (SVG)</label
+                                >
+                                <textarea
+                                    id="user_icon"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 code-input"
+                                    rows="3"
+                                ></textarea>
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-gray-700"
+                                    >Assistant Icon (SVG)</label
+                                >
+                                <textarea
+                                    id="assistant_icon"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 code-input"
+                                    rows="3"
+                                ></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Toggle Button Settings -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-semibold">
+                            Toggle Button Settings
+                        </h3>
+                        <div class="grid gap-4">
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-gray-700"
+                                    >Button Icon (SVG)</label
+                                >
+                                <textarea
+                                    id="toggleButtonIcon"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 code-input"
+                                    rows="3"
+                                >
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12 3c5.5 0 10 3.58 10 8s-4.5 8-10 8c-1.24 0-2.43-.18-3.53-.5C5.55 21 2 21 2 21c2.33-2.33 2.7-3.9 2.75-4.5C3.05 15.07 2 13.13 2 11c0-4.42 4.5-8 10-8z"/></svg></textarea
+                                >
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-gray-700"
+                                    >Icon Size</label
+                                >
+                                <input
+                                    type="text"
+                                    id="toggleButtonIconSize"
+                                    value="30px"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                />
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-gray-700"
+                                    >Button Size</label
+                                >
+                                <input
+                                    type="text"
+                                    id="toggleButtonSize"
+                                    value="60px"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preview Panel -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-2xl font-bold mb-4">Preview</h2>
+                    <p class="text-gray-600 mb-4">Configuration code:</p>
+                    <div id="previewCode" class="bg-gray-100 p-4 rounded-md">
+                        <pre class="whitespace-pre-wrap text-sm"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script type="module">
+            import { ArgoChat } from '../../src/components/ArgoChat.ts';
+
+            // Function to update color hex display
+            function updateColorHex(inputId, spanId) {
+                const input = document.getElementById(inputId);
+                const span = document.getElementById(spanId);
+                span.textContent = input.value.toUpperCase();
+            }
+
+            // Function to get current configuration
+            function getCurrentConfig() {
+                return {
+                    title: document.getElementById('title').value,
+                    apiKey: document.getElementById('apiKey').value,
+                    apiEndpoint: document.getElementById('apiEndpoint').value,
+                    greeting: document.getElementById('greeting').value,
+                    position: document.getElementById('position').value,
+                    placeholder: document.getElementById('placeholder').value,
+                    theme: {
+                        primaryColor:
+                            document.getElementById('primaryColor').value,
+                        textColor: document.getElementById('textColor').value,
+                        fontFamily: document.getElementById('fontFamily').value,
+                    },
+                    user_icon: document.getElementById('user_icon').value,
+                    assistant_icon:
+                        document.getElementById('assistant_icon').value,
+                    toggleButton: {
+                        icon: document.getElementById('toggleButtonIcon').value,
+                        icon_size: document.getElementById(
+                            'toggleButtonIconSize',
+                        ).value,
+                        btn_size:
+                            document.getElementById('toggleButtonSize').value,
+                    },
+                };
+            }
+
+            // Initialize chat instance
+            let chatInstance;
+
+            // Function to update chat options
+            function updateChat() {
+                const config = getCurrentConfig();
+
+                if (!chatInstance) {
+                    chatInstance = new ArgoChat(config);
+                    document.body.appendChild(chatInstance);
+                } else {
+                    chatInstance.updateOptions(config);
+                }
+
+                // Update preview code
+                document.querySelector('#previewCode pre').textContent =
+                    `const chatConfig = ${JSON.stringify(config, null, 2)};
+
+const chat = new ArgoChat(chatConfig);
+document.body.appendChild(chat);
+
+// Update options later if needed:
+chat.updateOptions(chatConfig);`;
+            }
+
+            // Add event listeners to all inputs
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach((input) => {
+                input.addEventListener('input', () => {
+                    if (input.type === 'color') {
+                        updateColorHex(input.id, input.id + 'Hex');
+                    }
+                    updateChat();
+                });
+
+                input.addEventListener('change', updateChat);
+            });
+
+            // Initial chat creation
+            updateChat();
+        </script>
+    </body>
+</html>

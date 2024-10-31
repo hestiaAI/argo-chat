@@ -1,0 +1,46 @@
+{
+    "name": "argo-chat",
+    "version": "1.0.0",
+    "type": "module",
+    "files": [
+        "dist"
+    ],
+    "main": "./dist/argo-chat.umd.cjs",
+    "module": "./dist/argo-chat.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/argo-chat.js",
+            "require": "./dist/argo-chat.umd.cjs",
+            "types": "./dist/index.d.ts"
+        },
+        "./style.css": "./dist/style.css"
+    },
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "preview": "vite preview",
+        "test": "vitest",
+        "coverage": "vitest run --coverage"
+    },
+    "dependencies": {
+        "lit": "^2.8.0"
+    },
+    "devDependencies": {
+        "@types/node": "^20.8.0",
+        "@typescript-eslint/eslint-plugin": "^8.12.2",
+        "@typescript-eslint/parser": "^8.12.2",
+        "@vitest/coverage-v8": "^0.34.5",
+        "autoprefixer": "^10.4.16",
+        "eslint": "^9.13.0",
+        "eslint-config-prettier": "^9.1.0",
+        "postcss": "^8.4.31",
+        "prettier": "^3.3.3",
+        "tailwindcss": "^3.3.5",
+        "tailwindcss-vite-plugin": "^0.0.7",
+        "typescript": "^5.6.3",
+        "vite": "^4.4.9",
+        "vite-plugin-dts": "^3.5.3",
+        "vitest": "^0.34.5"
+    }
+}
