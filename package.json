@@ -1,6 +1,6 @@
 {
     "name": "@hestia.ai/argo-chat",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "A lightweight chat widget for Argo AI agents",
     "author": "Hestia.ai",
     "keywords": [
