@@ -47,19 +47,13 @@ You can integrate ArgoChat into your website in multiple ways:
 Add the following script tag to your HTML:
 
 ```html
-<script type="module" src="https://cdn.jsdelivr.net/npm/argo-chat@latest/dist/argo-chat.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@hestia.ai/argo-chat@latest/dist/argo-chat.js"></script>
 ```
 
 ### Using NPM
 
 ```bash
-npm install argo-chat
-```
-
-Then import it in your JavaScript/TypeScript file:
-
-```javascript
-import 'argo-chat';
+npm i @hestia.ai/argo-chat
 ```
 
 ## Usage
@@ -171,7 +165,6 @@ Customize the chat icons:
         const chat = new ArgoChat({
             title: 'AI Assistant',
             apiKey: 'your-argo-api-key',
-            apiEndpoint: 'https://api.argo-g.pt/chat',
             greeting: 'Welcome! How can I help you today?',
             position: 'bottom-right',
             placeholder: 'Type your message...',
@@ -203,7 +196,7 @@ Prerequisites:
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/hestiaai/argo-chat.git
+git clone https://github.com/hestiaAI/argo-chat.git
 cd argo-chat
 ```
 
@@ -232,19 +225,29 @@ Visit `http://localhost:3000` to see the test page.
 ### Publishing
 
 To publish a new version:
-
-1. Update version in package.json:
+1. Login to NPM:
+```bash
+npm login --scope=@hestiaai
+```
+2. Update version in package.json:
 ```bash
 npm version patch  # or minor or major
 ```
 
-2. Build and test:
+3. Build and test:
 ```bash
+npm run ci
 npm run build
-npm run test
+
+# Pack the package locally
+npm pack
+
+# This will create a file like argo-chat-1.0.0.tgz
+# You can install it locally in a test project:
+npm install ../path/to/hestiaai/argo-chat-1.0.0.tgz
 ```
 
-3. Publish to npm:
+4. Publish to npm:
 ```bash
 npm publish
 ```

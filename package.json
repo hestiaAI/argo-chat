@@ -1,6 +1,27 @@
 {
-    "name": "argo-chat",
+    "name": "@hestia.ai/argo-chat",
     "version": "1.0.0",
+    "description": "A lightweight chat widget for Argo AI agents",
+    "author": "Hestia.ai",
+    "keywords": [
+        "chat",
+        "ai",
+        "argo",
+        "web-components",
+        "lit"
+    ],
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/hestiaAI/argo-chat.git"
+    },
+    "bugs": {
+        "url": "https://github.com/hestiaAI/argo-chat/issues"
+    },
+    "homepage": "https://github.com/hestiaAI/argo-chat#readme",
+    "publishConfig": {
+        "access": "public"
+    },
     "type": "module",
     "files": [
         "dist"
