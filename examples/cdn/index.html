@@ -8,16 +8,15 @@
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
             rel="stylesheet"
         />
-        <!-- Load ArgoChat -->
-        <script src="https://cdn.jsdelivr.net/npm/@hestia.ai/argo-chat@latest/dist/argo-chat.iife.js"></script>
     </head>
     <body>
         <div class="container">
             <h1>Basic Chat Example</h1>
             <p>Click the chat button in the bottom right corner to start.</p>
         </div>
-        <script>
+        <script type="module">
             // The component is now globally available
+            import { ArgoChat } from 'https://cdn.jsdelivr.net/npm/@hestia.ai/argo-chat@latest/dist/argo-chat.es.js';
             const chat = new ArgoChat({
                 title: 'Argonaut Chat',
             });

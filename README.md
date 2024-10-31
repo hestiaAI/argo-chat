@@ -46,8 +46,8 @@ You can integrate ArgoChat into your website in multiple ways:
 
 Add the following script tag to your HTML:
 
-```html
-<script type="module" src="https://cdn.jsdelivr.net/npm/@hestia.ai/argo-chat@latest/dist/argo-chat.js"></script>
+```js
+import { ArgoChat } from 'https://cdn.jsdelivr.net/npm/@hestia.ai/argo-chat@latest/dist/argo-chat.es.js';
 ```
 
 ### Using NPM
@@ -55,6 +55,13 @@ Add the following script tag to your HTML:
 ```bash
 npm i @hestia.ai/argo-chat
 ```
+
+Then import with:
+
+```js
+import { ArgoChat } from '@hestia.ai/argo-chat'
+```
+
 
 ## Usage
 
@@ -66,7 +73,7 @@ npm i @hestia.ai/argo-chat
 
 ```html
 <script type="module">
-    import { ArgoChat } from 'argo-chat';
+    import { ArgoChat } from 'https://cdn.jsdelivr.net/npm/@hestia.ai/argo-chat@latest/dist/argo-chat.es.js';
     
     const chat = new ArgoChat({
         apiKey: 'your-argo-api-key',
