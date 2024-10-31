@@ -20,7 +20,7 @@ export default defineConfig({
             entry: resolve(__dirname, 'src/index.ts'),
             name: 'ArgoChat',
             fileName: (format) => `argo-chat.${format}.js`,
-            formats: ['es', 'umd'],
+            formats: ['es', 'umd', 'iife'],
         },
         rollupOptions: {
             output: {
