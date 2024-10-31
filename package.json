@@ -23,20 +23,21 @@
         "access": "public"
     },
     "type": "module",
-    "files": [
-        "dist"
-    ],
-    "main": "./dist/argo-chat.umd.cjs",
-    "module": "./dist/argo-chat.js",
+    "main": "./dist/argo-chat.umd.js",
+    "module": "./dist/argo-chat.es.js",
     "types": "./dist/index.d.ts",
     "exports": {
         ".": {
-            "import": "./dist/argo-chat.js",
-            "require": "./dist/argo-chat.umd.cjs",
+            "import": "./dist/argo-chat.es.js",
+            "require": "./dist/argo-chat.umd.js",
             "types": "./dist/index.d.ts"
-        },
-        "./style.css": "./dist/style.css"
+        }
     },
+    "files": [
+        "dist"
+    ],
+    "jsdelivr": "./dist/argo-chat.umd.js",
+    "unpkg": "./dist/argo-chat.umd.js",
     "scripts": {
         "dev": "vite",
         "build": "tsc && vite build",

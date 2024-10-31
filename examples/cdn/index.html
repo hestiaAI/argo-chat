@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Basic Chat Example</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <!-- Load the UMD build first -->
+        <script
+            type="module"
+            src="https://cdn.jsdelivr.net/npm/@hestia.ai/argo-chat@latest/dist/argo-chat.umd.js"
+        ></script>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Basic Chat Example</h1>
+            <p>Click the chat button in the bottom right corner to start.</p>
+        </div>
+        <script type="module">
+            // Now we can import it like we would with npm
+            import { ArgoChat } from '@hestia.ai/argo-chat';
+
+            const chatConfig = {
+                title: 'Argonaut Chat',
+            };
+
+            const chat = new ArgoChat(chatConfig);
+            document.body.appendChild(chat);
+        </script>
+    </body>
+</html>

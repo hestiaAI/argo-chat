@@ -19,16 +19,17 @@ export default defineConfig({
         lib: {
             entry: resolve(__dirname, 'src/index.ts'),
             name: 'ArgoChat',
-            fileName: 'argo-chat',
+            fileName: (format) => `argo-chat.${format}.js`,
             formats: ['es', 'umd'],
         },
         rollupOptions: {
-            // Remove external configuration to bundle Lit with your package
             output: {
-                // Ensure proper module format output
-                format: 'es',
-                // Optional: Minimize chunk splitting
-                inlineDynamicImports: true,
+                globals: {
+                    '@hestia.ai/argo-chat': 'ArgoChat',
+                },
+                amd: {
+                    id: '@hestia.ai/argo-chat',
+                },
             },
         },
     },
