@@ -243,7 +243,7 @@ npm version patch  # or minor or major
 
 3. Build and test:
 ```bash
-npm run ci
+npm ci
 npm run build
 
 # Pack the package locally
