@@ -34,4 +34,5 @@ export default defineConfig({
         },
     },
     plugins: [dts(), TailwindCSSVitePlugin()],
+    assetsInclude: ['**/*.svg'],
 });

@@ -10,6 +10,14 @@ import { mergeConfig } from '../utils/merge';
 import { convertToPx } from '../utils/tools';
 import { baseStyle } from '../styles/base';
 
+// Import default icons
+// @ts-ignore
+import defaultChatIcon from '../assets/svg/chat-icon.svg?raw';
+// @ts-ignore
+import defaultUserIcon from '../assets/svg/user-icon.svg?raw';
+// @ts-ignore
+import defaultAssistantIcon from '../assets/svg/assistant-icon.svg?raw';
+
 // @ts-ignore
 import tailwindCss from '../styles/tailwind.css?inline';
 
@@ -40,6 +48,26 @@ export class ArgoChat extends LitElement {
     // Method to update options at runtime
     public updateOptions(newOptions: Partial<ChatOptions>): void {
         this.options = mergeConfig(this.options, newOptions);
+    }
+    private _renderIcon(
+        icon: string | undefined,
+        defaultIcon: string,
+        size: string,
+        additionalClasses: string = '',
+    ): unknown {
+        const iconContent = icon || defaultIcon;
+        const cleanedIcon = iconContent.replace(
+            /(width|height)=["'].*?["']/g,
+            '',
+        );
+        return html`
+            <div
+                class="flex items-center justify-center text-on-primary ${additionalClasses}"
+                style="width: ${size}; height: ${size};"
+            >
+                ${unsafeHTML(cleanedIcon)}
+            </div>
+        `;
     }
 
     render() {
@@ -168,15 +196,14 @@ export class ArgoChat extends LitElement {
 
                 <button
                     @click=${this._handleToggle}
-                    class="chat-button rounded-full shadow-lg transition-transform hover:scale-110 bg-primary"
+                    class="chat-button rounded-full shadow-lg transition-transform hover:scale-110 bg-primary flex items-center justify-center"
                     style="width: ${toggleButtonSize}; height: ${toggleButtonSize}"
                 >
-                    <div
-                        class="mx-auto text-on-primary"
-                        style="width: ${toggleIconSize}; height: ${toggleIconSize}"
-                    >
-                        ${html`${unsafeHTML(this.options.toggleButton.icon)}`}
-                    </div>
+                    ${this._renderIcon(
+                        this.options.toggleButton.icon,
+                        defaultChatIcon,
+                        toggleIconSize,
+                    )}
                 </button>
             </div>
         `;
@@ -184,29 +211,29 @@ export class ArgoChat extends LitElement {
 
     private _renderMessage(msg: Message) {
         const isUser = msg.role === 'user';
+        const iconSize = '2rem'; // TODO: Add this in the options
         const participant = isUser
             ? this.options.user_icon
             : this.options.assistant_icon;
+        const defaultIcon = isUser ? defaultUserIcon : defaultAssistantIcon;
+        const iconBgColor = isUser ? 'bg-primary' : 'bg-gray-400';
 
         return html`
             <div
-                class="flex items-start ${isUser
+                class="flex items-center ${isUser
                     ? 'flex-row-reverse'
-                    : 'space-x-2'}"
+                    : 'flex-row'} gap-2"
             >
-                <div class="flex-shrink-0 ${isUser ? 'ml-2' : 'mr-2'}">
-                    ${participant
-                        ? html`${unsafeHTML(participant)}`
-                        : html`
-                              <div
-                                  class="w-8 h-8 rounded-full ${isUser
-                                      ? 'bg-blue-500'
-                                      : 'bg-gray-400'} 
-                        flex items-center justify-center text-white text-sm font-medium"
-                              >
-                                  ${isUser ? 'U' : 'A'}
-                              </div>
-                          `}
+                <div
+                    class="flex-shrink-0 flex items-center justify-center"
+                    style="min-width: ${iconSize};"
+                >
+                    ${this._renderIcon(
+                        participant,
+                        defaultIcon,
+                        iconSize,
+                        `rounded-full ${iconBgColor} text-white p-1`,
+                    )}
                 </div>
 
                 <div
@@ -237,31 +264,79 @@ export class ArgoChat extends LitElement {
         }
     }
 
+    private validateApiConfig(): { isValid: boolean; error?: string } {
+        if (!this.options.apiEndpoint) {
+            return {
+                isValid: false,
+                error: 'API endpoint is not configured. Please set a valid endpoint in the options.',
+            };
+        }
+
+        try {
+            new URL(this.options.apiEndpoint);
+        } catch (e) {
+            return {
+                isValid: false,
+                error: `Invalid API endpoint URL: ${this.options.apiEndpoint}`,
+            };
+        }
+
+        if (!this.options.apiKey) {
+            return {
+                isValid: false,
+                error: 'API key is not configured. Please set a valid API key in the options.',
+            };
+        }
+
+        return { isValid: true };
+    }
+
+    private _responseErrorMsg(req: Response) {
+        if (req.status === 404) {
+            return '⚠️ Configuration Error: Invalid API endpoint URL.';
+        } else if (req.status === 401) {
+            return '⚠️ Configuration Error: Invalid API key.';
+        } else if (req.status === 500) {
+            return 'Internal server error, please try again later.';
+        } else {
+            return `Unknown error ${req.status}: ${req.statusText}`;
+        }
+    }
+
     private async _handleSend() {
         const input = this.shadowRoot?.querySelector(
             'input',
         ) as HTMLInputElement;
-        const user_message: Message = {
-            content: input.value.trim(),
-            role: 'user',
-        };
+        const userMessage = input.value.trim();
 
-        if (!user_message.content) return;
+        if (!userMessage) return;
 
-        // Clear input
+        // Validate API configuration first
+        const configValidation = this.validateApiConfig();
+        if (!configValidation.isValid) {
+            this._addMessage({
+                content: `⚠️ Configuration Error: ${configValidation.error}`,
+                role: 'assistant',
+            });
+            return;
+        }
         input.value = '';
+        this._addMessage({
+            content: userMessage,
+            role: 'user',
+        });
 
-        // Add user message
-        this._addMessage(user_message);
-
-        // Send message to server and handle response
+        this.loading = true;
         const query = {
-            messages: [...this.messages.slice(1).slice(-10), user_message],
+            messages: [
+                ...this.messages.slice(1).slice(-10),
+                { content: userMessage, role: 'user' },
+            ],
             model: 'gpt-3.5-turbo',
             stream: true,
         };
+
         try {
-            this.loading = true;
             const response = await fetch(this.options.apiEndpoint, {
                 method: 'POST',
                 headers: {
@@ -272,54 +347,67 @@ export class ArgoChat extends LitElement {
             });
 
             if (!response.ok || !response.body) {
-                throw new Error(
-                    'Failed to send message, please try again later.',
-                );
+                throw new Error(this._responseErrorMsg(response));
             }
+
             this._addMessage({ content: '', role: 'assistant' });
+
             const reader = response.body.getReader();
             const decoder = new TextDecoder('utf-8');
             let message = '';
-            const processText = ({
-                done,
-                value,
-            }: ReadableStreamReadResult<Uint8Array>): Promise<void> | void => {
-                if (done) {
-                    return;
-                }
-                decoder
-                    .decode(value)
-                    .split('\n')
-                    .filter((line) => line)
-                    .map((line) => line.replace(/^data: /, '').trim())
-                    .filter((line) => line !== '[DONE]')
-                    .map((line) => {
-                        try {
-                            return JSON.parse(line);
-                        } catch (error) {
-                            return { choices: [{ delta: { content: '' } }] };
-                        }
-                    })
-                    .forEach((chunk) => {
-                        message += chunk.choices[0].delta.content || '';
+
+            while (true) {
+                const { done, value } = await reader.read();
+
+                if (done) break;
+
+                const chunk = decoder.decode(value);
+                const lines = chunk.split('\n').filter((line) => line.trim());
+
+                for (const line of lines) {
+                    try {
+                        const cleanLine = line.replace(/^data: /, '').trim();
+                        if (cleanLine === '[DONE]') continue;
+
+                        const parsed = JSON.parse(cleanLine);
+                        message += parsed.choices[0].delta.content || '';
 
                         this._updateLastMessage({
                             content: message,
                             role: 'assistant',
                         });
-                    });
-
-                return reader.read().then(processText);
-            };
-            await reader.read().then(processText);
+                    } catch (e) {
+                        console.warn('Error parsing stream chunk:', e);
+                    }
+                }
+            }
         } catch (error) {
             console.error('Error sending message:', error);
+
+            let errorMessage = 'An error occurred while sending the message.';
+
+            if (error instanceof Error) {
+                if (error.message.includes('Failed to fetch')) {
+                    errorMessage =
+                        '⚠️ Network Error: Could not connect to the API. Please check your internet connection or the API URL.';
+                } else if (error.message.includes('NetworkError')) {
+                    errorMessage =
+                        '⚠️ Network Error: Connection failed. This might be due to CORS or network connectivity issues.';
+                } else if (error.message.includes('abort')) {
+                    errorMessage =
+                        '⚠️ Request timeout: The API request took too long to respond.';
+                } else {
+                    errorMessage = `${error.message}`;
+                }
+            }
+
             this._addMessage({
-                content: 'Sorry, there was an error processing your message.',
+                content: errorMessage,
                 role: 'assistant',
             });
+        } finally {
+            this.loading = false;
         }
-        this.loading = false;
     }
     private _updateLastMessage(message: Message) {
         this.messages[this.messages.length - 1] = message;
