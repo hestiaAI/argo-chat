@@ -5,7 +5,7 @@ export const DEFAULT_OPTIONS: ChatOptions = {
     greeting: 'Hello! How can I help you today?',
     position: 'bottom-right',
     placeholder: 'Type a message...',
-    apiEndpoint: 'https://api.argo-g.pt/v1/completions',
+    apiEndpoint: 'https://api.argo-g.pt/v1/chat/completions',
     apiKey: 'your_argonaut_api_key',
     theme: {
         primaryColor: '#3B82F6',
