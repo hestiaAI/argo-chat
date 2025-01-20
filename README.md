@@ -227,7 +227,7 @@ npm run build
 npm run serve
 ```
 
-Visit `http://localhost:3000` to see the test page.
+Visit `http://localhost:3000/examples/theme/` to see the test page.
 
 ### Publishing
 
